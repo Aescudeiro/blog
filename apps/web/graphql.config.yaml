@@ -1,0 +1,16 @@
+schema:
+  - ${VITE_APP_NHOST_BACKEND_URL}:
+      headers:
+        x-hasura-admin-secret: ${VITE_APP_NHOST_ADMIN_SECRET}
+generates:
+  src/gql/graphql.ts:
+    documents:
+      - 'src/**/*.graphql'
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-react-query'
+    config:
+      fetcher:
+        func: './graphql-fetcher#fetchData'
+        isReactHook: false
