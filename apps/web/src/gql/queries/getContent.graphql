@@ -1,0 +1,32 @@
+query getContent($contentId: uuid!) {
+  content(id: $contentId) {
+    id
+    title
+    body
+    owner {
+      id
+      displayName
+    }
+    updatedAt
+    createdAt
+    children_aggregate {
+      aggregate {
+        count
+      }
+    }
+    parent {
+      id
+      body
+      title
+      ownerId
+    }
+    ancestor {
+      id
+      title
+      ownerId
+    }
+    ancestorId
+    ownerId
+    parentId
+  }
+}

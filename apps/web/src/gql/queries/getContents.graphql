@@ -1,0 +1,19 @@
+query getContents {
+  contents(where: { parentId: { _is_null: true } }) {
+    id
+    title
+    body
+    owner {
+      id
+      displayName
+    }
+    createdAt
+    updatedAt
+    parentId
+    children_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+}

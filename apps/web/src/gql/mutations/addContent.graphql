@@ -1,0 +1,17 @@
+mutation addContent(
+  $body: String!
+  $parentId: uuid
+  $ancestorId: uuid
+  $title: String
+) {
+  insertContent(
+    object: {
+      title: $title
+      parentId: $parentId
+      body: $body
+      ancestorId: $ancestorId
+    }
+  ) {
+    id
+  }
+}

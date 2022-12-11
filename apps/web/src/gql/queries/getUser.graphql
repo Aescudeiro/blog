@@ -1,0 +1,28 @@
+query getUser($id: uuid!) {
+  user(id: $id) {
+    displayName
+    email
+    id
+    locale
+    lastSeen
+    createdAt
+    updatedAt
+    contents {
+      id
+      title
+      body
+      owner {
+        id
+        displayName
+      }
+      createdAt
+      updatedAt
+      parentId
+      children_aggregate {
+        aggregate {
+          count
+        }
+      }
+    }
+  }
+}

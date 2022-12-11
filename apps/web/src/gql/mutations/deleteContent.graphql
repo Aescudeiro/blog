@@ -1,0 +1,5 @@
+mutation deleteContent($contentId: uuid!) {
+  deleteContent(id: $contentId) {
+    id
+  }
+}
