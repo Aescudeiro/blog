@@ -1,0 +1,12 @@
+{
+  "name": "nhost",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nhost down && nhost dev -d --ui nhost"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

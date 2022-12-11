@@ -3,3 +3,13 @@
 Based on https://github.com/filipedeschamps/tabnews.com.br
 
 Demo: https://blog-web-ecru.vercel.app/
+
+### Run apps
+
+To run the apps, you need to have [NhostCLI](https://github.com/nhost/cli) instanled.
+
+After that run the command:
+
+```
+pnpm run dev
+```

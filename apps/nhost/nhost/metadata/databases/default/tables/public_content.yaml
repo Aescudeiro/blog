@@ -1,0 +1,94 @@
+table:
+  name: content
+  schema: public
+configuration:
+  column_config:
+    ancestor_id:
+      custom_name: ancestorId
+    body:
+      custom_name: body
+    created_at:
+      custom_name: createdAt
+    owner_id:
+      custom_name: ownerId
+    parent_id:
+      custom_name: parentId
+    updated_at:
+      custom_name: updatedAt
+  custom_column_names:
+    ancestor_id: ancestorId
+    body: body
+    created_at: createdAt
+    owner_id: ownerId
+    parent_id: parentId
+    updated_at: updatedAt
+  custom_root_fields:
+    delete: deleteContents
+    delete_by_pk: deleteContent
+    insert: insertContents
+    insert_one: insertContent
+    select: contents
+    select_aggregate: contentsAggregate
+    select_by_pk: content
+    update: updateContents
+    update_by_pk: updateContent
+    update_many: updateManyContents
+object_relationships:
+  - name: ancestor
+    using:
+      foreign_key_constraint_on: ancestor_id
+  - name: owner
+    using:
+      foreign_key_constraint_on: owner_id
+  - name: parent
+    using:
+      foreign_key_constraint_on: parent_id
+array_relationships:
+  - name: children
+    using:
+      foreign_key_constraint_on:
+        column: parent_id
+        table:
+          name: content
+          schema: public
+insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      set:
+        owner_id: x-hasura-User-Id
+      columns:
+        - body
+        - ancestor_id
+        - parent_id
+        - title
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - body
+        - created_at
+        - id
+        - ancestor_id
+        - owner_id
+        - parent_id
+        - title
+        - updated_at
+      filter: {}
+      allow_aggregations: true
+update_permissions:
+  - role: user
+    permission:
+      columns:
+        - body
+        - title
+      filter:
+        owner_id:
+          _eq: X-Hasura-User-Id
+      check: null
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        owner_id:
+          _eq: X-Hasura-User-Id
