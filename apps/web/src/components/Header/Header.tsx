@@ -1,132 +1,123 @@
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Button,
-  Container,
-  Divider,
-  IconButton,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Typography,
-} from '@mui/material';
-import { useSignOut } from '@nhost/react';
+import { Avatar, Badge, Box, IconButton, Typography } from '@mui/material';
 import { FC, useState } from 'react';
-import { StyledLink } from './styles';
+import { MobileMenu, Search, UserMenu } from './components';
+import { StyledAppBar, StyledToolbar } from './styles';
+import {
+  AccountCircle,
+  Notifications,
+  Forum,
+  MoreHoriz,
+} from '@mui/icons-material';
 import { useUserData } from '@nhost/react';
 import { Link } from 'react-router-dom';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-
-const pages = [
-  { label: 'Home', link: '/' },
-  { label: 'New Post', link: '/new-post' },
-];
 
 export const Header: FC = () => {
   const user = useUserData();
-  const { signOut } = useSignOut();
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [profileAnchorEl, setProfileAnchorEl] = useState<null | HTMLElement>(
+    null
+  );
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
+    useState<null | HTMLElement>(null);
 
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
+  const isProfileMenuOpen = Boolean(profileAnchorEl);
+  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const handleProfileMenuClose = () => {
+    setProfileAnchorEl(null);
+    handleMobileMenuClose();
   };
 
-  const handleLogout = () => {
-    handleCloseUserMenu();
-    signOut();
+  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setProfileAnchorEl(event.currentTarget);
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Box sx={{ flexGrow: 1, display: 'flex' }}>
-            {pages.map((page) => (
-              <StyledLink to={page.link} key={page.label}>
-                <Button
-                  onClick={handleCloseUserMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
-                >
-                  {page.label}
-                </Button>
-              </StyledLink>
-            ))}
-          </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar
-                alt={user?.displayName}
-                src={user?.avatarUrl}
-                sx={{ border: '1px solid black' }}
-              />
-            </IconButton>
-            <Menu
-              anchorEl={anchorElUser}
-              id="account-menu"
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-              onClick={handleCloseUserMenu}
-              PaperProps={{
-                elevation: 0,
-                sx: {
-                  overflow: 'visible',
-                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                  mt: 1.5,
-                  '& .MuiAvatar-root': {
-                    width: 32,
-                    height: 32,
-                    ml: -0.5,
-                    mr: 1,
-                  },
-                  '&:before': {
-                    content: '""',
-                    display: 'block',
-                    position: 'absolute',
-                    top: 0,
-                    right: 14,
-                    width: 10,
-                    height: 10,
-                    bgcolor: 'background.paper',
-                    transform: 'translateY(-50%) rotate(45deg)',
-                    zIndex: 0,
-                  },
-                },
-              }}
-              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+    <Box sx={{ flexGrow: 1 }}>
+      <StyledAppBar position="static">
+        <StyledToolbar>
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <Typography variant="h6" component="div" color="black">
+              BLOG
+            </Typography>
+          </Link>
+          <Box sx={{ flexGrow: 1 }} />
+          <Search />
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <IconButton
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
             >
-              <MenuItem sx={{ mx: 1, borderRadius: '6px' }}>
-                <Link to={`/${user?.id}`}>
-                  <Box display="flex" alignItems="center">
-                    <HomeOutlinedIcon />
-                    <Typography textAlign="center" ml={1}>
-                      {user?.displayName}
-                    </Typography>
-                  </Box>
-                </Link>
-              </MenuItem>
-              <Divider />
-              <MenuItem
-                onClick={handleLogout}
-                sx={{ mx: 1, borderRadius: '6px' }}
-              >
-                <Box display="flex" alignItems="center">
-                  <LogoutOutlinedIcon color="error" />
-                  <Typography textAlign="center" ml={1} color="error">
-                    Logout
-                  </Typography>
-                </Box>
-              </MenuItem>
-            </Menu>
+              <Badge badgeContent={4} color="error">
+                <Forum />
+              </Badge>
+            </IconButton>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
+            >
+              <Badge badgeContent={17} color="error">
+                <Notifications />
+              </Badge>
+            </IconButton>
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu-mobile"
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              {user?.avatarUrl ? (
+                <Avatar src={user.avatarUrl} sx={{ width: 24, height: 24 }} />
+              ) : (
+                <AccountCircle />
+              )}
+            </IconButton>
           </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="show more"
+              aria-controls="primary-search-account-menu-mobile"
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              {user?.avatarUrl ? (
+                <Avatar src={user.avatarUrl} sx={{ width: 24, height: 24 }} />
+              ) : (
+                <AccountCircle />
+              )}
+            </IconButton>
+          </Box>
+        </StyledToolbar>
+      </StyledAppBar>
+      <MobileMenu
+        isMenuOpen={isMobileMenuOpen}
+        anchorEl={mobileMoreAnchorEl}
+        onMenuClose={handleMobileMenuClose}
+        userId={user?.id ?? ''}
+        userDisplayName={user?.displayName}
+      />
+      <UserMenu
+        isMenuOpen={isProfileMenuOpen}
+        anchorEl={profileAnchorEl}
+        onMenuClose={handleProfileMenuClose}
+        userId={user?.id ?? ''}
+        userDisplayName={user?.displayName}
+      />
+    </Box>
   );
 };
