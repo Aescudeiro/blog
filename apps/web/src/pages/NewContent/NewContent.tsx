@@ -33,7 +33,7 @@ export const NewContent: FC = () => {
   };
 
   const handleGoBack = () => {
-    navigate('-1');
+    navigate('/');
   };
 
   return (
