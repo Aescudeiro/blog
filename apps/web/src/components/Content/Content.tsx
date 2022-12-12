@@ -22,7 +22,7 @@ export const Content: FC<Props> = ({ content }) => {
   };
 
   return (
-    <Box>
+    <Box width="100%">
       <Box>
         <Header
           createdAt={createdAt}
