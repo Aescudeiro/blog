@@ -1,8 +1,16 @@
-import { FC, useState } from 'react';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useSignUpEmailPassword } from '@nhost/react';
+import { FC, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Form, FormContainer } from '../../styles';
-import { Button, TextField, Typography } from '@mui/material';
 
 export const SignUp: FC = () => {
   const [fields, setFields] = useState([
@@ -35,6 +43,7 @@ export const SignUp: FC = () => {
       type: 'password',
       value: '',
       name: 'password',
+      showPassword: false,
     },
   ]);
 
@@ -47,6 +56,38 @@ export const SignUp: FC = () => {
       return prev.map((field) => {
         if (field.name === name) {
           return { ...field, value };
+        }
+        return field;
+      });
+    });
+  };
+
+  const handleClickShowPassword = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setFields((prev) => {
+      return prev.map((field) => {
+        if (field.name === 'password') {
+          return {
+            ...field,
+            showPassword: !field.showPassword,
+            type: field.showPassword ? 'password' : 'text',
+          };
+        }
+        return field;
+      });
+    });
+  };
+
+  const handleMouseDownPassword = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    setFields((prev) => {
+      return prev.map((field) => {
+        if (field.name === 'password') {
+          return {
+            ...field,
+            showPassword: !field.showPassword,
+            type: field.showPassword ? 'password' : 'text',
+          };
         }
         return field;
       });
@@ -86,6 +127,19 @@ export const SignUp: FC = () => {
             onChange={handleFieldsChange}
             disabled={isLoading}
             margin="normal"
+            InputProps={{
+              endAdornment:
+                field.name === 'password' ? (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {field.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ) : null,
+            }}
           />
         ))}
         <Button

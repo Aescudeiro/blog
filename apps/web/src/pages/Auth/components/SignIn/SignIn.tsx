@@ -1,4 +1,11 @@
-import { Button, TextField, Typography } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useSignInEmailPassword } from '@nhost/react';
 import { FC, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
@@ -17,6 +24,7 @@ export const SignIn: FC = () => {
       type: 'password',
       value: '',
       name: 'password',
+      showPassword: false,
     },
   ]);
   const { signInEmailPassword, isLoading, isSuccess, isError, error } =
@@ -28,6 +36,38 @@ export const SignIn: FC = () => {
       return prev.map((field) => {
         if (field.name === name) {
           return { ...field, value };
+        }
+        return field;
+      });
+    });
+  };
+
+  const handleClickShowPassword = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setFields((prev) => {
+      return prev.map((field) => {
+        if (field.name === 'password') {
+          return {
+            ...field,
+            showPassword: !field.showPassword,
+            type: field.showPassword ? 'password' : 'text',
+          };
+        }
+        return field;
+      });
+    });
+  };
+
+  const handleMouseDownPassword = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    setFields((prev) => {
+      return prev.map((field) => {
+        if (field.name === 'password') {
+          return {
+            ...field,
+            showPassword: !field.showPassword,
+            type: field.showPassword ? 'password' : 'text',
+          };
         }
         return field;
       });
@@ -60,6 +100,19 @@ export const SignIn: FC = () => {
             onChange={handleFieldsChange}
             disabled={isLoading}
             margin="normal"
+            InputProps={{
+              endAdornment:
+                field.name === 'password' ? (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {field.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ) : null,
+            }}
           />
         ))}
         <Button
