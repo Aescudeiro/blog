@@ -1,0 +1,4 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- CREATE INDEX contents_gin_idx ON content
+-- USING GIN ((title || ' ' || body) gin_trgm_ops);

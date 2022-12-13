@@ -2,12 +2,7 @@ import { Avatar, Badge, Box, IconButton, Typography } from '@mui/material';
 import { FC, useState } from 'react';
 import { MobileMenu, Search, UserMenu } from './components';
 import { StyledAppBar, StyledToolbar } from './styles';
-import {
-  AccountCircle,
-  Notifications,
-  Forum,
-  MoreHoriz,
-} from '@mui/icons-material';
+import { AccountCircle, Notifications, Forum } from '@mui/icons-material';
 import { useUserData } from '@nhost/react';
 import { Link } from 'react-router-dom';
 

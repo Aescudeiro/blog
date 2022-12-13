@@ -1,4 +1,4 @@
-import { styled, alpha, Box, InputBase } from '@mui/material';
+import { styled, alpha, Box, TextField, inputBaseClasses } from '@mui/material';
 
 export const Container = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -27,13 +27,8 @@ export const SearchIconWrapper = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
 }));
 
-export const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  width: '100%',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
+export const StyledTextField = styled(TextField)(({ theme }) => ({
+  [`& .${inputBaseClasses.root}`]: {
+    padding: 0,
   },
 }));

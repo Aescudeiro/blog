@@ -3543,6 +3543,10 @@ export type Query_Root = {
   getallcontentchilds: Array<Content>;
   /** execute function "getallcontentchilds" and query aggregates on result of table type "content" */
   getallcontentchilds_aggregate: Content_Aggregate;
+  /** execute function "searchcontents" which returns "content" */
+  searchcontents: Array<Content>;
+  /** execute function "searchcontents" and query aggregates on result of table type "content" */
+  searchcontents_aggregate: Content_Aggregate;
   /** fetch data from the table: "auth.users" using primary key columns */
   user?: Maybe<Users>;
   /** fetch data from the table: "auth.users" */
@@ -3802,6 +3806,26 @@ export type Query_RootGetallcontentchilds_AggregateArgs = {
 };
 
 
+export type Query_RootSearchcontentsArgs = {
+  args: Searchcontents_Args;
+  distinct_on?: InputMaybe<Array<Content_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Content_Order_By>>;
+  where?: InputMaybe<Content_Bool_Exp>;
+};
+
+
+export type Query_RootSearchcontents_AggregateArgs = {
+  args: Searchcontents_Args;
+  distinct_on?: InputMaybe<Array<Content_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Content_Order_By>>;
+  where?: InputMaybe<Content_Bool_Exp>;
+};
+
+
 export type Query_RootUserArgs = {
   id: Scalars['uuid'];
 };
@@ -3822,6 +3846,10 @@ export type Query_RootUsersAggregateArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   order_by?: InputMaybe<Array<Users_Order_By>>;
   where?: InputMaybe<Users_Bool_Exp>;
+};
+
+export type Searchcontents_Args = {
+  search?: InputMaybe<Scalars['String']>;
 };
 
 export type Subscription_Root = {
@@ -3910,6 +3938,10 @@ export type Subscription_Root = {
   getallcontentchilds: Array<Content>;
   /** execute function "getallcontentchilds" and query aggregates on result of table type "content" */
   getallcontentchilds_aggregate: Content_Aggregate;
+  /** execute function "searchcontents" which returns "content" */
+  searchcontents: Array<Content>;
+  /** execute function "searchcontents" and query aggregates on result of table type "content" */
+  searchcontents_aggregate: Content_Aggregate;
   /** fetch data from the table: "auth.users" using primary key columns */
   user?: Maybe<Users>;
   /** fetch data from the table: "auth.users" */
@@ -4233,6 +4265,26 @@ export type Subscription_RootGetallcontentchildsArgs = {
 
 export type Subscription_RootGetallcontentchilds_AggregateArgs = {
   args: Getallcontentchilds_Args;
+  distinct_on?: InputMaybe<Array<Content_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Content_Order_By>>;
+  where?: InputMaybe<Content_Bool_Exp>;
+};
+
+
+export type Subscription_RootSearchcontentsArgs = {
+  args: Searchcontents_Args;
+  distinct_on?: InputMaybe<Array<Content_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  order_by?: InputMaybe<Array<Content_Order_By>>;
+  where?: InputMaybe<Content_Bool_Exp>;
+};
+
+
+export type Subscription_RootSearchcontents_AggregateArgs = {
+  args: Searchcontents_Args;
   distinct_on?: InputMaybe<Array<Content_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -5048,6 +5100,13 @@ export type GetUserQueryVariables = Exact<{
 
 export type GetUserQuery = { __typename?: 'query_root', user?: { __typename?: 'users', displayName: string, email?: any | null, id: any, locale: string, lastSeen?: any | null, createdAt: any, updatedAt: any, contents: Array<{ __typename?: 'content', id: any, title?: string | null, body: string, createdAt: any, updatedAt: any, parentId?: any | null, owner: { __typename?: 'users', id: any, displayName: string }, children_aggregate: { __typename?: 'content_aggregate', aggregate?: { __typename?: 'content_aggregate_fields', count: number } | null } }> } | null };
 
+export type SearchContentsQueryVariables = Exact<{
+  search: Scalars['String'];
+}>;
+
+
+export type SearchContentsQuery = { __typename?: 'query_root', searchcontents: Array<{ __typename?: 'content', body: string, title?: string | null, id: any, ownerId: any, ancestor?: { __typename?: 'content', title?: string | null } | null }> };
+
 
 export const AddContentDocument = `
     mutation addContent($body: String!, $parentId: uuid, $ancestorId: uuid, $title: String) {
@@ -5248,5 +5307,30 @@ export const useGetUserQuery = <
     useQuery<GetUserQuery, TError, TData>(
       ['getUser', variables],
       fetchData<GetUserQuery, GetUserQueryVariables>(GetUserDocument, variables),
+      options
+    );
+export const SearchContentsDocument = `
+    query searchContents($search: String!) {
+  searchcontents(args: {search: $search}) {
+    body
+    title
+    id
+    ownerId
+    ancestor {
+      title
+    }
+  }
+}
+    `;
+export const useSearchContentsQuery = <
+      TData = SearchContentsQuery,
+      TError = unknown
+    >(
+      variables: SearchContentsQueryVariables,
+      options?: UseQueryOptions<SearchContentsQuery, TError, TData>
+    ) =>
+    useQuery<SearchContentsQuery, TError, TData>(
+      ['searchContents', variables],
+      fetchData<SearchContentsQuery, SearchContentsQueryVariables>(SearchContentsDocument, variables),
       options
     );

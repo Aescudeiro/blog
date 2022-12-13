@@ -1,0 +1,11 @@
+query searchContents($search: String!) {
+  searchcontents(args: { search: $search }) {
+    body
+    title
+    id
+    ownerId
+    ancestor {
+      title
+    }
+  }
+}
